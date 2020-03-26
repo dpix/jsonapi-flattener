@@ -73,14 +73,14 @@ to
 
 ```json
 {
-  data: {
-    id: 1,
-    type: "person",
-    friend: {
-      id: 2,
-      type: "person",
-      name: "sally",
-      age: 14
+  "data": {
+    "id": 1,
+    "type": "person",
+    "friend": {
+      "id": 2,
+      "type": "person",
+      "name": "sally",
+      "age": 14
     }
   }
 }

@@ -5,9 +5,14 @@
   "author": "Daniel Pickering <dan.j.pick@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jasmine index.spec.js"
+    "test": "jasmine index.spec.js",
+    "bundle": "babel index.js --out-file bundle.js"
   },
+  "files": ["bundle.js"],
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
     "jasmine": "^3.5.0"
   }
 }

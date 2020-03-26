@@ -59,4 +59,4 @@ const normalizeResponse = ({ data, included = [], meta = {} }) => {
     };
 };
 
-module.exports = normalizeResponse;
+export default normalizeResponse;

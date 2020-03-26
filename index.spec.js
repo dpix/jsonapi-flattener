@@ -1,4 +1,4 @@
-let normalizeResponse = require("./");
+let normalizeResponse = require("./").default;
 
 describe("jsonApiNormalizer", () => {
   it("maps id and type", () => {

@@ -12,13 +12,13 @@ e.g.
 
 ```json
 {
-  data: 
+  "data": 
   {
-    id: 1,
-    type: "person",
-    attributes: {
-      name: "bob",
-      age: 12
+    "id": 1,
+    "type": "person",
+    "attributes": {
+      "name": "bob",
+      "age": 12
     }
   }
 }
@@ -28,11 +28,11 @@ to
 
 ```json
 {
-  data: {
-    id: 1,
-    type: "person",
-    name: "bob",
-    age: 12
+  "data": {
+    "id": 1,
+    "type": "person",
+    "name": "bob",
+    "age": 12
   }
 }
 ```
@@ -44,25 +44,25 @@ e.g.
 
 ```json
 {
-  data: {
-    id: 1,
-    type: "person",
-    realtionships: {
-      friend: {
-        data: {
-          id: 2,
-          type: "person"
+  "data": {
+    "id": 1,
+    "type": "person",
+    "realtionships": {
+      "friend": {
+        "data": {
+          "id": 2,
+          "type": "person"
         }
       }
     }
   },
-  included: [
+  "included": [
     {
-      id: 2,
-      type: "person",
-      attributes: {
-        name: "sally",
-        age: 14
+      "id": 2,
+      "type": "person",
+      "attributes": {
+        "name": "sally",
+        "age": 14
       }
     }
   ]

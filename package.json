@@ -1,6 +1,6 @@
 {
   "name": "jsonapi-flattener",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "bundle.js",
   "author": "Daniel Pickering <dan.j.pick@gmail.com>",
   "license": "MIT",

@@ -23,15 +23,20 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var findIncluded = function findIncluded(id, type, included) {
+var findIncluded = function findIncluded(id, type, included, depth) {
   var data = included.find(function (i) {
     return i.id === id && i.type === type;
   }); // eslint-disable-next-line no-use-before-define
 
-  return data ? normalize(data, included) : {};
+  return data ? normalize(data, included, depth) : {};
 };
 
-var normalizeRelationships = function normalizeRelationships(relationships, included) {
+var normalizeRelationships = function normalizeRelationships(relationships, included, depth) {
+  if (depth == 0) {
+    return relationships;
+  }
+
+  depth--;
   var flattenedRelationships = Object.entries(relationships).filter(function (_ref) {
     var _ref2 = _slicedToArray(_ref, 2),
         value = _ref2[1];
@@ -44,11 +49,11 @@ var normalizeRelationships = function normalizeRelationships(relationships, incl
 
     var isArray = Array.isArray(value.data);
     return _defineProperty({}, propertyName, isArray ? value.data.map(function (d) {
-      return _objectSpread({}, d, {}, findIncluded(d.id, d.type, included));
+      return _objectSpread({}, d, {}, findIncluded(d.id, d.type, included, depth));
     }) : _objectSpread({
       id: value.data.id,
       type: value.data.type
-    }, findIncluded(value.data.id, value.data.type, included)));
+    }, findIncluded(value.data.id, value.data.type, included, depth)));
   }).reduce(function (acc, current) {
     return _objectSpread({}, acc, {}, current);
   }, {});
@@ -58,6 +63,7 @@ var normalizeRelationships = function normalizeRelationships(relationships, incl
 var normalize = function normalize() {
   var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var included = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  var depth = arguments.length > 2 ? arguments[2] : undefined;
   var id = data.id,
       type = data.type,
       _data$attributes = data.attributes,
@@ -70,7 +76,7 @@ var normalize = function normalize() {
     type: type
   }, attributes);
 
-  var normalizedRelationships = normalizeRelationships(relationships, included);
+  var normalizedRelationships = normalizeRelationships(relationships, included, depth);
   return _objectSpread({}, normalizedAttributes, {}, normalizedRelationships);
 };
 
@@ -80,16 +86,17 @@ var normalizeResponse = function normalizeResponse(_ref6) {
       included = _ref6$included === void 0 ? [] : _ref6$included,
       _ref6$meta = _ref6.meta,
       meta = _ref6$meta === void 0 ? {} : _ref6$meta;
+  var depth = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
 
   if (Array.isArray(data)) {
     return _objectSpread({
       data: data.map(function (d) {
-        return normalize(d, included);
+        return normalize(d, included, depth);
       })
     }, meta);
   }
 
-  return _objectSpread({}, normalize(data, included), {}, meta);
+  return _objectSpread({}, normalize(data, included, depth), {}, meta);
 };
 
 var _default = normalizeResponse;

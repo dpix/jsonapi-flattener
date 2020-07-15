@@ -171,4 +171,134 @@ describe("jsonApiNormalizer", () => {
 
     expect(relationship1.nestedRelationship.attribute2).toBe("cba");
   });
+
+  it("handles recursive relationships with default depth", () => {
+    const { relationship1 } = normalizeResponse({
+      data: {
+        relationships: {
+          relationship1: {
+            data: {
+              id: 123,
+              type: "relationship_type"
+            }
+          }
+        }
+      },
+      included: [
+        {
+          id: 123,
+          type: "relationship_type",
+          attributes: {
+            attribute1: "abc"
+          },
+          relationships: {
+            nestedRelationship: {
+              data: {
+                id: 456,
+                type: "nested_relationship_type"
+              }
+            }
+          }
+        },
+        {
+          id: 456,
+          type: "nested_relationship_type",
+          attributes: {
+            attribute1: "def"
+          },
+          relationships: {
+            nestedRelationship: {
+              data: {
+                id: 123,
+                type: "relationship_type"
+              }
+            }
+          }
+        }
+      ]
+    });
+
+    expect(
+      relationship1
+      .nestedRelationship
+      .nestedRelationship
+      .nestedRelationship
+      .nestedRelationship
+      .nestedRelationship
+      .nestedRelationship
+      .nestedRelationship
+      .nestedRelationship
+      .nestedRelationship.id).toBe(456)
+
+      expect(
+        relationship1
+        .nestedRelationship
+        .nestedRelationship
+        .nestedRelationship
+        .nestedRelationship
+        .nestedRelationship
+        .nestedRelationship
+        .nestedRelationship
+        .nestedRelationship
+        .nestedRelationship
+        .nestedRelationship
+        .nestedRelationship).toBeUndefined();
+  });
+
+  it("handles recursive relationships with custom depth", () => {
+    const { relationship1 } = normalizeResponse({
+      data: {
+        relationships: {
+          relationship1: {
+            data: {
+              id: 123,
+              type: "relationship_type"
+            }
+          }
+        }
+      },
+      included: [
+        {
+          id: 123,
+          type: "relationship_type",
+          attributes: {
+            attribute1: "abc"
+          },
+          relationships: {
+            nestedRelationship: {
+              data: {
+                id: 456,
+                type: "nested_relationship_type"
+              }
+            }
+          }
+        },
+        {
+          id: 456,
+          type: "nested_relationship_type",
+          attributes: {
+            attribute1: "def"
+          },
+          relationships: {
+            nestedRelationship: {
+              data: {
+                id: 123,
+                type: "relationship_type"
+              }
+            }
+          }
+        }
+      ]
+    }, 2);
+
+    expect(
+      relationship1
+      .nestedRelationship.id).toBe(456)
+
+      expect(
+        relationship1
+        .nestedRelationship
+        .nestedRelationship
+        .nestedRelationship).toBeUndefined();
+  });
 });

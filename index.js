@@ -1,10 +1,15 @@
-const findIncluded = (id, type, included) => {
+const findIncluded = (id, type, included, depth) => {
     const data = included.find(i => i.id === id && i.type === type);
     // eslint-disable-next-line no-use-before-define
-    return data ? normalize(data, included) : {};
+    return data ? normalize(data, included, depth) : {};
 };
 
-const normalizeRelationships = (relationships, included) => {
+const normalizeRelationships = (relationships, included, depth) => {
+    if(depth == 0){
+        return relationships;
+    }
+    depth--;
+
     const flattenedRelationships = Object.entries(relationships)
         .filter(([, value]) => value && value.data)
         .map(([propertyName, value]) => {
@@ -13,12 +18,12 @@ const normalizeRelationships = (relationships, included) => {
                 [propertyName]: isArray
                     ? value.data.map(d => ({
                         ...d,
-                        ...findIncluded(d.id, d.type, included)
+                        ...findIncluded(d.id, d.type, included, depth)
                     }))
                     : {
                         id: value.data.id,
                         type: value.data.type,
-                        ...findIncluded(value.data.id, value.data.type, included)
+                        ...findIncluded(value.data.id, value.data.type, included, depth)
                     }
             };
         })
@@ -29,14 +34,15 @@ const normalizeRelationships = (relationships, included) => {
     return flattenedRelationships;
 };
 
-const normalize = (data = {}, included = []) => {
+const normalize = (data = {}, included = [], depth) => {
     const { id, type, attributes = {}, relationships = {} } = data;
 
     const normalizedAttributes = { id, type, ...attributes };
 
     const normalizedRelationships = normalizeRelationships(
         relationships,
-        included
+        included,
+        depth
     );
 
     return {
@@ -45,16 +51,16 @@ const normalize = (data = {}, included = []) => {
     };
 };
 
-const normalizeResponse = ({ data, included = [], meta = {} }) => {
+const normalizeResponse = ({ data, included = [], meta = {} }, depth = 10) => {
     if (Array.isArray(data)) {
         return {
-            data: data.map(d => normalize(d, included)),
+            data: data.map(d => normalize(d, included, depth)),
             ...meta
         };
     }
 
     return {
-        ...normalize(data, included),
+        ...normalize(data, included, depth),
         ...meta
     };
 };

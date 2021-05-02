@@ -4,6 +4,11 @@
   "main": "bundle.js",
   "author": "Daniel Pickering <dan.j.pick@gmail.com>",
   "license": "MIT",
+  "homepage": "https://github.com/dpix/jsonapi-flattener",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dpix/jsonapi-flattener.git"
+  },
   "scripts": {
     "test": "jasmine index.spec.js",
     "bundle": "babel index.js --out-file bundle.js"

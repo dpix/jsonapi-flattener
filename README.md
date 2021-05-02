@@ -96,3 +96,5 @@ to
 * Recursively include nested relationships
 
 * Handles collection types also
+
+* See `index.spex.js` for full list of test examples

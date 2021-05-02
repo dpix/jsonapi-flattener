@@ -2,6 +2,13 @@
 
 Simple tool for flattening JSON api responses into simpler objects.
 
+```bash
+npm i jsonapi-flattener
+```
+
+```bash
+yarn add jsonapi-flattener
+```
 
 ## Features:
 
